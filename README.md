@@ -44,4 +44,29 @@ O projeto adota uma Arquitetura Desacoplada (Jamstack / Serverless):
 | Camada | Tecnologia / Plataforma | Justificativa Tecnica |
 | :--- | :--- | :--- |
 | Design e Prototipagem | Figma | Criacao dos wireframes de alta fidelidade, validacao de fluxo de telas e testes rapidos de usabilidade touch. |
-| Front-end | Next.js (React) + Tailwind CSS | Ag
+| Front-end | Next.js (React) + Tailwind CSS | Agilidade na criacao de layouts responsivos, estilizacao limpa com identidade visual propria e modo tela cheia (Kiosk). |
+| Icones e Estetica | Lucide Icons / SVG | Elementos visuais leves e icones intuitivos para garantir acessibilidade visual. |
+| Back-end e Banco | Supabase (PostgreSQL) | Banco relacional seguro, pronto para armazenar os registros da pesquisa e os cupons resgatados. |
+| Hospedagem | Vercel | Deploy continuo, SSL nativo e alta performance global. |
+
+---
+
+## 5. Proposta e Estrutura Inicial das Telas (Prototipadas no Figma)
+
+1. Tela 01 - Boas-Vindas (Home): Badge da marca Capim Dourado, chamada principal e o selo circular "30 segundos • Rapido. Sem cadastro" com o botao principal "Comecar".
+2. Tela 02 - Percepcao de Variedade: Validacao por frases diretas ("As lojas tem o que procuro") com botoes de resposta rapida ("Nao representa" / "Representa").
+3. Tela 03 - Avaliacao Geral: Classificacao das lojas visitadas em categorias simples (Mas, Boas, Excelentes).
+4. Tela 04 - Atributo de Valor: Escolha do fator mais importante na experiencia (Atendimento, Precos, Variedade ou Promocoes).
+5. Tela 05 - Roleta de Premios (Gamificacao): Tela interativa com o componente de roleta dividida em segmentos (descontos de 5%, 10% e Mimos) e botao central de acao "Girar a roleta".
+6. Tela 06 - Resgate do Premio: Exibicao do voucher conquistado (ex: 10% de desconto) com orientacoes e botao de encerramento.
+7. Tela 07 - Captura Opcional (Fidelidade): Campo de entrada para numero de telefone para envio do desconto e novidades (com total transparencia e foco em LGPD).
+
+---
+
+## 6. Incorporacao da Pratica Sorteada: Testes, Metricas e Feedback
+
+A pratica sorteada foi incorporada tanto no desenvolvimento do produto quanto na funcionalidade principal entregue ao Capim Dourado Shopping:
+
+* Coleta Continua de Feedback como Nucleo do Produto: O totem transforma a jornada do visitante em um funil de metricas de satisfacao (CSAT simplificado), medindo a percepcao de variedade, a nota geral das lojas e os principais direcionadores de valor (atendimento, preco, variedade ou promocao) em menos de 30 segundos.
+* Metricas de Engajamento e Conversao: O sistema monitora a taxa de conclusao da pesquisa, o volume de giros na roleta e a taxa de retencao opcional (usuarios que deixam o telefone para resgatar cupons), gerando indicadores acionaveis para a gestao do shopping.
+* Testes de Usabilidade e Validacao Rapida: Os wireframes desenvolvidos no Figma foram estruturados para testes de toque rapido (Fitts's Law), garantindo botoes amplos, linguagem direta e zero atrito para validar a experiencia com usuarios reais antes da implantacao final.
