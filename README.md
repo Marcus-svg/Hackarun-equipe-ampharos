@@ -43,25 +43,5 @@ O projeto adota uma Arquitetura Desacoplada (Jamstack / Serverless):
 
 | Camada | Tecnologia / Plataforma | Justificativa Tecnica |
 | :--- | :--- | :--- |
-| Front-end | Next.js (React) + Tailwind CSS | Agilidade na criacao de layouts responsivos, estilizacao limpa com identidade visual propria e modo tela cheia (Kiosk). |
-| Icones e Estetica | Lucide Icons / SVG | Elementos visuais leves e icones intuitivos para garantir acessibilidade visual. |
-| Back-end e Banco | Supabase (PostgreSQL) | Banco relacional seguro, pronto para armazenar os registros da pesquisa e os cupons resgatados. |
-| Hospedagem | Vercel | Deploy continuo, SSL nativo e alta performance global. |
-
----
-
-## 5. Proposta e Estrutura Inicial das Telas (Baseada nos Wireframes)
-
-1. Tela 01 - Boas-Vindas (Home): Badge da marca Capim Dourado, chamada principal e o selo circular "30 segundos • Rapido. Sem cadastro" com o botao principal "Comecar".
-2. Tela 02 - Percepcao de Variedade: Validacao por frases diretas ("As lojas tem o que procuro") com botoes de resposta rapida ("Nao representa" / "Representa").
-3. Tela 03 - Avaliacao Geral: Classificacao das lojas visitadas em categorias simples (Mas, Boas, Excelentes).
-4. Tela 04 - Atributo de Valor: Escolha do fator mais importante na experiencia (Atendimento, Precos, Variedade ou Promocoes).
-5. Tela 05 - Roleta de Premios (Gamificacao): Tela interativa com o componente de roleta dividida em segmentos (descontos de 5%, 10% e Mimos) e botao central de acao "Girar a roleta".
-6. Tela 06 - Resgate do Premio: Exibicao do voucher conquistado (ex: 10% de desconto) com orientacoes e botao de encerramento.
-7. Tela 07 - Captura Opcional (Fidelidade): Campo de entrada para numero de telefone para envio do desconto e novidades (com total transparencia e foco em LGPD).
-
----
-
-## 6. Incorporacao da Pratica / Tecnologia Sorteada (LGPD e Experiencia Inclusiva)
-* Privacidade by Design (LGPD): A pesquisa de satisfacao e totalmente anonima por padrao. O fornecimento do numero de telefone na ultima etapa e estritamente opcional, servindo apenas como chave de resgate do cupom mediante consentimento claro do usuario.
-* Acessibilidade Touch: Botoes de grande formato e navegacao linear em no maximo 3 toques, garantindo inclusao digital para todos os perfis de frequentadores do shopping.
+| Design e Prototipagem | Figma | Criacao dos wireframes de alta fidelidade, validacao de fluxo de telas e testes rapidos de usabilidade touch. |
+| Front-end | Next.js (React) + Tailwind CSS | Ag
