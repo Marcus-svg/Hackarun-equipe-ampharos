@@ -1,58 +1,56 @@
-# Planejamento Técnico Inicial — Ecossistema Inteligente Capim Dourado
+# Ecossistema Inteligente Capim Dourado (Totem & Analytics)
 
-## 1. Documentação Inicial do Projeto
+![Status](https://img.shields.io/badge/Status-Em_Desenvolvimento_(MVP)-yellow)
+![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E)
+![Figma](https://img.shields.io/badge/Figma-Prototipo-F24E1E)
 
-### 1.1. Visão Geral e Problema
-O Capim Dourado Shopping (Palmas - TO) recebe um fluxo intenso de visitantes em busca de lazer e compras. No entanto, a coleta de feedback sobre a satisfação com as lojas costuma ser fragmentada e de baixa adesão. A solução proposta resolve isso por meio de um **Totem Interativo de Pesquisa Expressa (30 segundos)**, transformando a opinião do público em métricas reais de satisfação para a gestão com o auxílio de gamificação.
-
-### 1.2. Solução Proposta
-Uma plataforma de autoatendimento touch em formato de totem que executa uma pesquisa rápida de 3 etapas (avaliação de variedade, percepção geral e atributos de valor) seguida de uma roleta de prêmios interativa, unindo engajamento e captação de métricas sem fricção para o usuário.
-
-### 1.3. Escopo do MVP
-* **Incluso:** Fluxo completo do totem em modo Kiosk (3 perguntas + roleta + cupom de desconto), captura opcional de telefone e painel de métricas simuladas.
-* **Fora de Escopo:** Integração direta com sistemas de ERP e PDV das lojas individuais.
+Solucao B2B2C de autoatendimento interativo (Modo Kiosk) e inteligencia de dados em tempo real, desenvolvida durante o Hackathon para o **Capim Dourado Shopping (Palmas - TO)**. O sistema transforma a coleta de feedback em uma experiencia gamificada de 30 segundos, gerando metricas acionaveis para a gestao e conversao de vendas para os lojistas.
 
 ---
 
-## 2. Linguagem de Programação Escolhida
-* **TypeScript / JavaScript (ES2023+):** Escolhido pela alta produtividade, tipagem estática e ecossistema unificado para front-end.
-* **SQL:** Utilizado para modelagem de banco de dados e persistência das métricas e feedbacks.
+## Sumario Executivo e Problema de Negocio
+
+Centros comerciais enfrentam baixa adesao em pesquisas de satisfacao tradicionais e dificuldade em atribuir o impacto da experiencia do visitante ao desempenho das lojas. 
+
+Nossa solucao substitui formularios longos por um **Micro-Funil Gamificado de 30 segundos** operado em totens touch. O visitante avalia a experiencia em tres toques, gira uma roleta de recompensas instantaneas e resgata descontos no comercio local, enquanto a administracao recebe telemetria em tempo real sobre percepcao de variedade, atendimento e retencao.
 
 ---
 
-## 3. Arquitetura Proposta
-1. **Camada de Apresentação (Front-end):** Interface em tela cheia otimizada para telas *touchscreen* (Modo Kiosk).
-2. **Camada de Dados & API:** Backend assíncrono para registro seguro de interações de feedback.
-3. **Banco de Dados Relacional:** Persistência para alimentar em tempo real o painel de métricas da gestão.
+## 1. Proposta e Estrutura de Interface (UI/UX no Figma)
+
+O design foi concebido seguindo principios de ergonomia para totens (*Fitts's Law*, alto contraste e zero necessidade de digitacao na etapa obrigatoria).
+
+* **Link Oficial do Prototipo:** [Acessar Wireframes Totem Capim Dourado no Figma](https://www.figma.com/design/NMQEEiZzv9lszXZZ3JiwXN/Wireframes-Totem-Capim-Dourado?node-id=0-1&t=5uVLa0GvSPKI9WZx-1)
+
+### Fluxo de Telas Mapeado:
+1. **00_Idle / Attract Screen:** Tela inicial com selo de velocidade (*"30 segundos • Rapido. Sem cadastro"*) e CTA de alto destaque (`Comecar`).
+2. **01_Percepcao de Mix (Variedade):** Validacao binaria rapida sobre o mix de lojas (*"As lojas tem o que procuro: Representa / Nao representa"*).
+3. **02_CSAT Geral (Avaliacao):** Classificacao direta do conjunto de lojas visitadas (`01 Mas`, `02 Boas`, `03 Excelentes`).
+4. **03_Driver de Valor:** Identificacao do fator decisivo de compra (`Atendimento`, `Precos`, `Variedade`, `Promocoes`).
+5. **04_Motor de Gamificacao (Roleta):** Interacao ludica pos-pesquisa sorteando beneficios (`5%`, `10%`, `Mimo`).
+6. **05_Conversao e Voucher:** Exibicao clara do premio desbloqueado com instrucoes de uso nas lojas aderentes.
+7. **06_Retencao Opt-in (LGPD):** Captura opcional de WhatsApp/Telefone `(DD) XXXXX-XXXX` para envio digital do cupom e ofertas futuras.
 
 ---
 
-## 4. Plataforma e Tecnologias Adotadas
+## 2. Arquitetura do Sistema
 
-| Camada | Tecnologia / Plataforma | Justificativa Técnica |
-| :--- | :--- | :--- |
-| **Design e Wireframes** | **Figma** | Prototipagem de alta fidelidade e validação rápida do fluxo de telas de toque (UX). |
-| **Front-end** | **Next.js (React) + Tailwind CSS** | Agilidade na criação de layouts responsivos e interfaces de totem. |
-| **Back-end e Banco** | **Supabase (PostgreSQL)** | Banco de dados relacional seguro e estruturado para armazenamento rápido de métricas. |
-| **Hospedagem** | **Vercel** | Deploy contínuo e alta disponibilidade. |
+O projeto adota uma **Arquitetura Serverless Orientada a Eventos**, separando a interface de operacao continua (Totem) do motor analitico (Dashboard).
 
----
-
-## 5. Proposta e Estrutura Inicial das Telas (Wireframes no Figma)
-O fluxo desenhado e prototipado no Figma compreende as seguintes telas principais:
-1. **Home / Boas-Vindas:** Chamada principal destacando a rapidez (*"30 segundos • Rápido. Sem cadastro"*) e botão "Começar".
-2. **Avaliação de Variedade:** Validação rápida por frases (*"As lojas têm o que procuro"*).
-3. **Avaliação Geral:** Classificação do conjunto de lojas visitadas (Más, Boas, Excelentes).
-4. **Atributo de Valor:** Escolha do fator de maior destaque (Atendimento, Preços, Variedade, Promoções).
-5. **Roleta de Prêmios:** Tela interativa de gamificação pós-pesquisa com giros para recompensas.
-6. **Resgate e Fidelidade:** Exibição do cupom gerado e campo opcional para inserção de telefone (em conformidade com a LGPD).
-
-🔗 **Acesse o protótipo completo no Figma:** [Wireframes Totem Capim Dourado](https://www.figma.com/design/NMQEEiZzv9lszXZZ3JiwXN/Wireframes-Totem-Capim-Dourado?node-id=0-1&t=5uVLa0GvSPKI9WZx-1)
-
----
-
-## 6. Incorporação da Prática Sorteada: Testes, Métricas e Feedback
-A tecnologia/prática sorteada foi **Testes e Métricas (Feedback)**, incorporada da seguinte forma na solução:
-* **Métricas de Experiência (CSAT Express):** O totem opera como um gerador automatizado de indicadores de satisfação, coletando a percepção real do público em segundos.
-* **Análise de Indicadores:** As respostas tabuladas alimentam um painel gerencial que mapeia falhas e acertos das operações do shopping com base em dados concretos.
-* **Testes de Usabilidade:** Os wireframes criados no Figma foram pensados com base em leis de usabilidade *touch* (botões grandes e navegação linear), permitindo testar o fluxo com usuários reais antes do desenvolvimento final.
+```text
++-----------------------------------------------------------------------+
+|                        CAMADA DE APRESENTACAO                         |
+|  [ Totem Web App (Modo Kiosk) ]        [ Dashboard Gestao (Admin) ]   |
+|  Next.js + Tailwind + LocalCache       Next.js + Recharts (Realtime)  |
++----------------+-------------------------------------+----------------+
+                 | POST /feedback                      | WebSockets
+                 v (JSON Anonimizado)                  v (Live Metrics)
++-----------------------------------------------------------------------+
+|                      CAMADA DE SERVICOS E DADOS                       |
+|                     Supabase (BaaS / PostgreSQL)                      |
+|  - Autenticacao Anonima e Row Level Security (RLS)                    |
+|  - Armazenamento de Respostas, Giros de Roleta e Leads (Hash/LGPD)    |
++-----------------------------------------------------------------------+
