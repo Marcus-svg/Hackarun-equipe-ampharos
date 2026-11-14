@@ -34,7 +34,7 @@ class StoreRedemptionViewModel extends ChangeNotifier {
       );
       isSuccess = true;
       statusMessage =
-          'Resgate registrado com sucesso! O cupom ${redeemed.code} (${redeemed.interestCategory}) foi vinculado Ã  loja "$selectedStore".';
+          'Resgate registrado com sucesso! O cupom ${redeemed.code} (${redeemed.interestCategory}) foi vinculado a loja "$selectedStore".';
     } catch (e) {
       isSuccess = false;
       statusMessage = e.toString().replaceAll('Exception: ', '');
