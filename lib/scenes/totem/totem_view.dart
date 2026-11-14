@@ -116,47 +116,56 @@ class _TotemViewState extends State<TotemView> {
           ),
         ),
         const SizedBox(height: 24),
-        InkWell(
-          onTap: () => vm.toggleLgpd(!vm.lgpdAccepted),
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
+        MergeSemantics(
+          child: Semantics(
+            // Anuncia o estado de consentimento como um único item
+            // (marcado/desmarcado + ação de toque) para leitores de tela.
+            checked: vm.lgpdAccepted,
+            child: Material(
               color: AppColors.lightCream,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: vm.lgpdAccepted ? AppColors.gold : Colors.transparent,
-                width: 1.5,
-              ),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  vm.lgpdAccepted
-                      ? Icons.check_box
-                      : Icons.check_box_outline_blank,
-                  color: AppColors.gold,
-                  size: 22,
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: vm.lgpdAccepted ? AppColors.gold : Colors.transparent,
+                  width: 1.5,
                 ),
-                const SizedBox(width: 10),
-                const Expanded(
-                  child: Column(
+              ),
+              child: InkWell(
+                onTap: () => vm.toggleLgpd(!vm.lgpdAccepted),
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Privacidade Garantida (Sem CPF ou Nome)',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      Icon(
+                        vm.lgpdAccepted
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank,
+                        color: AppColors.gold,
+                        size: 22,
                       ),
-                      SizedBox(height: 2),
-                      Text(
-                        'Toque para aceitar: suas respostas são totalmente anônimas e usadas apenas para gerar seu cupom e melhorar o shopping.',
-                        style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.textSecondary),
+                      const SizedBox(width: 10),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Privacidade Garantida (Sem CPF ou Nome)',
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Toque para aceitar: suas respostas são totalmente anônimas e usadas apenas para gerar seu cupom e melhorar o shopping.',
+                              style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.textSecondary),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -195,25 +204,27 @@ class _TotemViewState extends State<TotemView> {
           spacing: 8,
           runSpacing: 8,
           children: vm.categories.map((cat) {
-            return InkWell(
-              onTap: () => vm.selectCategoryAndAdvance(cat),
+            return Material(
+              color: AppColors.cream,
               borderRadius: BorderRadius.circular(12),
-              child: Container(
-                width: 175,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                decoration: BoxDecoration(
-                  color: AppColors.cream,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(cat,
-                        style: const TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.w600)),
-                    const Text('→'),
-                  ],
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () => vm.selectCategoryAndAdvance(cat),
+                child: Container(
+                  width: 175,
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(cat,
+                            style: const TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
+                      ),
+                      const Text('→'),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -242,26 +253,26 @@ class _TotemViewState extends State<TotemView> {
         const SizedBox(height: 16),
         ...events.map((ev) => Padding(
           padding: const EdgeInsets.only(bottom: 10),
-          child: InkWell(
-            onTap: () => vm.selectEventFormatAndAdvance(ev),
+          child: Material(
+            color: AppColors.cream,
             borderRadius: BorderRadius.circular(12),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.cream,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(ev,
-                        style: const TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.w500)),
-                  ),
-                  const Text('→'),
-                ],
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () => vm.selectEventFormatAndAdvance(ev),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(ev,
+                          style: const TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w500)),
+                    ),
+                    const Text('→'),
+                  ],
+                ),
               ),
             ),
           ),
@@ -282,27 +293,29 @@ class _TotemViewState extends State<TotemView> {
         const SizedBox(height: 16),
         ...options.asMap().entries.map((entry) => Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: InkWell(
-            onTap: () async {
-              vm.selectSatisfaction(entry.value);
-              await vm.completeDirectlyAndIssueCoupon();
-            },
+          child: Material(
+            color: AppColors.cream,
             borderRadius: BorderRadius.circular(14),
-            child: Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-              decoration: BoxDecoration(
-                color: AppColors.cream,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('0${entry.key + 1}   ${entry.value}',
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w600)),
-                  const Text('→'),
-                ],
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () async {
+                vm.selectSatisfaction(entry.value);
+                await vm.completeDirectlyAndIssueCoupon();
+              },
+              child: Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text('0${entry.key + 1}   ${entry.value}',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w600)),
+                    ),
+                    const Text('→'),
+                  ],
+                ),
               ),
             ),
           ),
@@ -337,12 +350,17 @@ class _TotemViewState extends State<TotemView> {
                   style:
                   TextStyle(fontSize: 10, color: AppColors.textSecondary)),
               const SizedBox(height: 8),
-              Text(
-                coupon.code,
-                style: const TextStyle(
-                  fontSize: 34,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
+              // FittedBox evita estouro do código em telas estreitas ou com
+              // fonte ampliada pelo usuário.
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  coupon.code,
+                  style: const TextStyle(
+                    fontSize: 34,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                  ),
                 ),
               ),
               const Divider(height: 24),

@@ -11,6 +11,10 @@ class StoreRedemptionViewModel extends ChangeNotifier {
   String? statusMessage;
   bool isSuccess = false;
 
+  // Estado de carregamento: evita duplo toque no kiosk e da retorno visual
+  // enquanto o resgate e registrado.
+  bool isSubmitting = false;
+
   StoreRedemptionViewModel({
     required this.repository,
     required this.coordinator,
@@ -27,6 +31,17 @@ class StoreRedemptionViewModel extends ChangeNotifier {
   }
 
   Future<void> redeemCode(String rawCode) async {
+    if (rawCode.trim().isEmpty) {
+      isSuccess = false;
+      statusMessage = 'Informe o código do cupom para registrar o resgate.';
+      notifyListeners();
+      return;
+    }
+
+    isSubmitting = true;
+    statusMessage = null;
+    notifyListeners();
+
     try {
       final redeemed = await repository.redeemCoupon(
         code: rawCode,
@@ -34,10 +49,12 @@ class StoreRedemptionViewModel extends ChangeNotifier {
       );
       isSuccess = true;
       statusMessage =
-          'Resgate registrado com sucesso! O cupom ${redeemed.code} (${redeemed.interestCategory}) foi vinculado a loja "$selectedStore".';
+          'Resgate registrado com sucesso! O cupom ${redeemed.code} (${redeemed.interestCategory}) foi vinculado à loja "$selectedStore".';
     } catch (e) {
       isSuccess = false;
       statusMessage = e.toString().replaceAll('Exception: ', '');
+    } finally {
+      isSubmitting = false;
     }
     notifyListeners();
   }

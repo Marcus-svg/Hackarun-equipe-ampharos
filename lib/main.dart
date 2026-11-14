@@ -134,21 +134,27 @@ class ShellView extends StatelessWidget {
     required bool active,
     required VoidCallback onTap,
   }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: active ? AppColors.gold : Colors.white12,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: active ? Colors.black : Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
+    return Semantics(
+      selected: active,
+      child: Material(
+        color: active ? AppColors.gold : Colors.white12,
+        borderRadius: BorderRadius.circular(8),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            // Alvo de toque mínimo de 44px (totem/kiosk e celular).
+            constraints: const BoxConstraints(minHeight: 44),
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            child: Text(
+              label,
+              style: TextStyle(
+                color: active ? Colors.black : Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
           ),
         ),
       ),

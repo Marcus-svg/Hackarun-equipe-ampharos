@@ -217,13 +217,15 @@ class TotemFeedback(Base):
     __tablename__ = "totem_feedbacks"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    coupon_code: Mapped[str | None] = mapped_column(String(20), index=True)
+    coupon_code: Mapped[str | None] = mapped_column(String(20), unique=True, index=True)
     age_group: Mapped[str] = mapped_column(String(40))
     interest_category: Mapped[str] = mapped_column(String(60))
     theme: Mapped[str | None] = mapped_column(String(40), index=True)
     preferred_event_format: Mapped[str | None] = mapped_column(String(200))
     general_satisfaction: Mapped[str | None] = mapped_column(String(40))
     discount_benefit: Mapped[str | None] = mapped_column(String(60))
+    is_redeemed: Mapped[bool] = mapped_column(Boolean, default=False)
+    redeemed_store_name: Mapped[str | None] = mapped_column(String(120))
     data_status: Mapped[str] = mapped_column(String(20), default="real")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
 

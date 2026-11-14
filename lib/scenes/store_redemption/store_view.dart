@@ -103,6 +103,8 @@ class _StoreRedemptionViewState extends State<StoreRedemptionView> {
                 const SizedBox(height: 16),
                 TextField(
                   controller: _codeController,
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (value) => vm.redeemCode(value),
                   decoration: InputDecoration(
                     labelText: 'Código Único do Cupom',
                     hintText: 'Ex: CD-3319',
@@ -117,6 +119,7 @@ class _StoreRedemptionViewState extends State<StoreRedemptionView> {
                 CdPrimaryButton(
                   label: 'Registrar Resgate pelo Código',
                   icon: Icons.verified_outlined,
+                  isLoading: vm.isSubmitting,
                   onPressed: () => vm.redeemCode(_codeController.text),
                 ),
                 if (vm.statusMessage != null) ...[
@@ -125,22 +128,41 @@ class _StoreRedemptionViewState extends State<StoreRedemptionView> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: vm.isSuccess
-                          ? Colors.green.shade50
-                          : Colors.red.shade50,
+                          ? AppColors.successBg
+                          : AppColors.errorBg,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          vm.statusMessage!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: vm.isSuccess
-                                ? AppColors.success
-                                : AppColors.error,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // O ícone garante que sucesso/erro não dependam
+                            // apenas da cor (WCAG 1.4.1 - uso da cor).
+                            Icon(
+                              vm.isSuccess
+                                  ? Icons.check_circle_outline
+                                  : Icons.error_outline,
+                              size: 18,
+                              color: vm.isSuccess
+                                  ? AppColors.success
+                                  : AppColors.error,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                vm.statusMessage!,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: vm.isSuccess
+                                      ? AppColors.success
+                                      : AppColors.error,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         if (vm.isSuccess) ...[
                           const SizedBox(height: 8),
@@ -150,7 +172,7 @@ class _StoreRedemptionViewState extends State<StoreRedemptionView> {
                             },
                             child: const Text(
                                 'Ver análise atualizada no Dashboard →',
-                                style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.bold)),
+                                style: TextStyle(color: AppColors.goldText, fontWeight: FontWeight.bold)),
                           ),
                         ],
                       ],

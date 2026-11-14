@@ -7,36 +7,51 @@ enum AdminTab { visaoGeral, publicos, interesses, tendencias, relatorios }
 class DashboardViewModel extends ChangeNotifier {
   final IIntelligenceRepository repository;
 
-  // Controla se o gestor está na tela 01 (Acesso/Login) ou dentro do Painel (02 a 06)
   bool isAuthenticated = true;
-
-  // Aba ativa do Painel Administrativo (02 a 06)
   AdminTab currentTab = AdminTab.visaoGeral;
 
-  // Filtros e seleções interativas das telas 03, 04, 05 e 06
   String selectedAgeFilter = 'Todas as idades';
   String selectedCategoryName = 'Gastronomia';
   String selectedReportFormat = 'PDF';
   String? reportFeedbackMessage;
+  bool isSyncingBackend = false;
 
   final generatedReports = [
-  {
-  'titulo': 'Resumo de agosto',
-  'data': '31 ago. 2026',
-  'formato': 'PDF',
-  'acao': 'Baixar PDF',
-  },
-  {
-  'titulo': 'Resumo de julho',
-  'data': '31 jul. 2026',
-  'formato': 'CSV',
-  'acao': 'Baixar CSV',
-  },
+    {
+      'titulo': 'Resumo de agosto',
+      'data': '31 ago. 2026',
+      'formato': 'PDF',
+      'acao': 'Baixar PDF',
+    },
+    {
+      'titulo': 'Resumo de julho',
+      'data': '31 jul. 2026',
+      'formato': 'CSV',
+      'acao': 'Baixar CSV',
+    },
   ];
 
-  DashboardViewModel({required this.repository});
+  DashboardViewModel({required this.repository}) {
+    refreshBackendData();
+  }
 
-  // Dados brutos e métricas consolidadas do Repositório
+  // Status e contadores do Backend Python/FastAPI (OSINT)
+  bool get isBackendOnline => repository.isBackendOnline;
+  int get backendObservationsCount => repository.backendObservationsCount;
+  int get backendTrendPointsCount => repository.backendTrendPointsCount;
+  int get backendPlaceLocationsCount => repository.backendPlaceLocationsCount;
+  int get backendRegionalEventsCount => repository.backendRegionalEventsCount;
+  String get googleTrendsStatus => repository.googleTrendsStatus;
+  String get googlePlacesStatus => repository.googlePlacesStatus;
+
+  Future<void> refreshBackendData() async {
+    isSyncingBackend = true;
+    notifyListeners();
+    await repository.syncBackend();
+    isSyncingBackend = false;
+    notifyListeners();
+  }
+
   List<CouponFeedbackModel> get feedbacks => repository.getAllFeedbacks();
   List<String> get categories => repository.getCategories();
   List<CategoryMetricModel> get categoryMetrics =>
@@ -55,7 +70,6 @@ class DashboardViewModel extends ChangeNotifier {
     return '${s.substring(0, s.length - 3)}.${s.substring(s.length - 3)}';
   }
 
-  // Indicadores de Cupons (Fonte 1 + Fonte 2)
   int get totalIssued => feedbacks.length;
   int get totalRedeemed => feedbacks.where((f) => f.isRedeemed).length;
 
@@ -82,7 +96,6 @@ class DashboardViewModel extends ChangeNotifier {
     return ((model.baseInterestedCount / total) * 100).round().clamp(1, 100);
   }
 
-  // Ações de Navegação e Interação
   void login() {
     isAuthenticated = true;
     notifyListeners();
@@ -122,7 +135,7 @@ class DashboardViewModel extends ChangeNotifier {
       'acao': 'Baixar $selectedReportFormat',
     });
     reportFeedbackMessage =
-    'Relatório em formato $selectedReportFormat gerado com sucesso com base nos$totalConsumersFormatted consumidores!';
+    'Relatório em formato $selectedReportFormat gerado com sucesso com base nos $totalConsumersFormatted consumidores!';
     notifyListeners();
   }
 }

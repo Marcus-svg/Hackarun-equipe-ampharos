@@ -21,9 +21,12 @@ class CdPrimaryButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-              onPressed != null ? AppColors.gold : Colors.grey.shade300,
+          backgroundColor: AppColors.gold,
           foregroundColor: AppColors.textPrimary,
+          // Estado desabilitado explícito: o padrão do Material aplica baixa
+          // opacidade e o rótulo fica quase ilegível sobre o fundo claro.
+          disabledBackgroundColor: Colors.grey.shade300,
+          disabledForegroundColor: AppColors.textSecondary,
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
           shape: const StadiumBorder(),

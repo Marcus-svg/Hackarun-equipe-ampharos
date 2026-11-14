@@ -204,10 +204,19 @@ class _DashboardViewState extends State<DashboardView> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // Antes era um botao sem acao ("morto"). Agora da
+                            // retorno claro ao usuario do que fazer.
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'A recuperação de senha é feita pelo administrador do sistema.'),
+                              ),
+                            );
+                          },
                           child: const Text('Esqueci minha senha',
                               style: TextStyle(
-                                  fontSize: 11, color: AppColors.gold)),
+                                  fontSize: 11, color: AppColors.goldText)),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -247,7 +256,7 @@ class _DashboardViewState extends State<DashboardView> {
               style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.gold)),
+                  color: AppColors.goldText)),
         ),
         const SizedBox(width: 10),
         Text(text,
@@ -306,9 +315,9 @@ class _DashboardViewState extends State<DashboardView> {
               TextButton.icon(
                 onPressed: vm.logout,
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                icon: const Icon(Icons.logout, size: 15, color: AppColors.gold),
-                label: const Text('Sair (Tela 01 Acesso)',
-                    style: TextStyle(fontSize: 11, color: AppColors.gold)),
+                icon: const Icon(Icons.logout, size: 15, color: AppColors.goldText),
+                label: const Text('Sair da conta',
+                    style: TextStyle(fontSize: 11, color: AppColors.goldText)),
               ),
             ],
           ),
@@ -322,22 +331,27 @@ class _DashboardViewState extends State<DashboardView> {
     final active = vm.currentTab == tab;
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
-      child: InkWell(
-        onTap: () => vm.setTab(tab),
-        borderRadius: BorderRadius.circular(10),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          decoration: BoxDecoration(
-            color: active ? AppColors.cream : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: active ? FontWeight.bold : FontWeight.normal,
-              color: AppColors.textPrimary,
+      child: Semantics(
+        selected: active,
+        child: Material(
+          color: active ? AppColors.cream : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => vm.setTab(tab),
+            child: Container(
+              width: double.infinity,
+              constraints: const BoxConstraints(minHeight: 44),
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: active ? FontWeight.bold : FontWeight.normal,
+                  color: AppColors.textPrimary,
+                ),
+              ),
             ),
           ),
         ),
@@ -386,20 +400,26 @@ class _DashboardViewState extends State<DashboardView> {
   Widget _buildMobileTabChip(
       DashboardViewModel vm, AdminTab tab, String label) {
     final active = vm.currentTab == tab;
-    return InkWell(
-      onTap: () => vm.setTab(tab),
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: active ? AppColors.cream : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: active ? FontWeight.bold : FontWeight.normal,
+    return Semantics(
+      selected: active,
+      child: Material(
+        color: active ? AppColors.cream : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => vm.setTab(tab),
+          child: Container(
+            // Alvo de toque minimo de 44px para uso em tablet/celular.
+            constraints: const BoxConstraints(minHeight: 44),
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: active ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
           ),
         ),
       ),
@@ -479,11 +499,15 @@ class _DashboardViewState extends State<DashboardView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Dentro de _buildTab02VisaoGeral(DashboardViewModel vm), logo após _buildTopFiltersBar(...):
         _buildTopFiltersBar(
           codeLabel: '02 / PAINEL ADMINISTRATIVO',
           title: 'Visão geral',
           subtitle: 'Conheça o que move seu público.',
         ),
+
+        _buildOsintBackendBanner(vm),
+        const SizedBox(height: 16),
 
         // 4 KPI Cards do Figma + 1 KPI do Ciclo de Cupom
         Wrap(
@@ -588,7 +612,7 @@ class _DashboardViewState extends State<DashboardView> {
                             style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.gold)),
+                                color: AppColors.goldText)),
                       ),
                     ],
                   ),
@@ -683,7 +707,7 @@ class _DashboardViewState extends State<DashboardView> {
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.gold)),
+                                  color: AppColors.goldText)),
                         ),
                       ],
                     ),
@@ -797,7 +821,7 @@ class _DashboardViewState extends State<DashboardView> {
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.gold)),
+                          color: AppColors.goldText)),
                   const SizedBox(height: 12),
                   const Text(
                     '449 consumidores. Gastronomia é o principal interesse deste grupo.',
@@ -810,7 +834,7 @@ class _DashboardViewState extends State<DashboardView> {
                     child: const Text('Explorar interesses →',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.gold)),
+                            color: AppColors.goldText)),
                   ),
                 ],
               ),
@@ -1042,7 +1066,7 @@ class _DashboardViewState extends State<DashboardView> {
                 onPressed: () => vm.setTab(AdminTab.tendencias),
                 child: const Text('Ver evolução da categoria →',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: AppColors.gold)),
+                        fontWeight: FontWeight.bold, color: AppColors.goldText)),
               ),
             ],
           ),
@@ -1225,7 +1249,7 @@ class _DashboardViewState extends State<DashboardView> {
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
                           color: diff >= 0
-                              ? AppColors.gold
+                              ? AppColors.goldText
                               : AppColors.textSecondary,
                         ),
                       ),
@@ -1295,7 +1319,7 @@ class _DashboardViewState extends State<DashboardView> {
                             style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.gold)),
+                                color: AppColors.goldText)),
                       ],
                     ),
                   )),
@@ -1436,7 +1460,7 @@ class _DashboardViewState extends State<DashboardView> {
                                   style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.gold)),
+                                      color: AppColors.goldText)),
                             ],
                           ),
                         )),
@@ -1529,6 +1553,79 @@ class _DashboardViewState extends State<DashboardView> {
       color: Colors.white,
       borderRadius: BorderRadius.circular(12),
       border: Border.all(color: Colors.grey.shade200),
+    );
+  }
+  Widget _buildOsintBackendBanner(DashboardViewModel vm) {
+    final online = vm.isBackendOnline;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      decoration: BoxDecoration(
+        color: online ? AppColors.successBg : AppColors.cream,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: online ? AppColors.success : AppColors.gold,
+          width: 1.2,
+        ),
+      ),
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 12,
+        runSpacing: 8,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                online ? Icons.cloud_done_outlined : Icons.cloud_off_outlined,
+                size: 20,
+                color: online ? AppColors.success : AppColors.goldText,
+              ),
+              const SizedBox(width: 10),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      online
+                          ? 'MOTOR OSINT & FASTAPI CONECTADO (SQLite hackarun.db)'
+                          : 'MODO DEMONSTRAÇÃO / CACHE LOCAL (FastAPI offline)',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: online ? AppColors.success : AppColors.goldText,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      online
+                          ? 'Observações: ${vm.backendObservationsCount} • Google Trends: ${vm.backendTrendPointsCount} pts • Google Places: ${vm.backendPlaceLocationsCount} locais • Eventos: ${vm.backendRegionalEventsCount}'
+                          : 'Conecte o backend local em http://localhost:8000 para sincronizar Google Trends, Places e SQLite.',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          TextButton.icon(
+            onPressed: vm.isSyncingBackend ? null : vm.refreshBackendData,
+            icon: const Icon(Icons.sync, size: 16, color: AppColors.goldText),
+            label: Text(
+              vm.isSyncingBackend ? 'Sincronizando...' : 'Sincronizar API',
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: AppColors.goldText,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -20,7 +20,7 @@ abstract class AppTypography {
     fontSize: 10,
     fontWeight: FontWeight.bold,
     letterSpacing: 1.3,
-    color: AppColors.gold,
+    color: AppColors.goldText,
   );
 
   static const TextStyle body = TextStyle(

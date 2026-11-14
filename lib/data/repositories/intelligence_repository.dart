@@ -14,6 +14,16 @@ abstract class IIntelligenceRepository {
   List<AudienceProfileModel> getAudienceProfiles();
   List<GooglePerceptionModel> getGoogleBusinessPerceptions();
 
+  // Telemetria e Sincronização com o Backend Python/FastAPI (OSINT + SQLite)
+  bool get isBackendOnline;
+  int get backendObservationsCount;
+  int get backendTrendPointsCount;
+  int get backendPlaceLocationsCount;
+  int get backendRegionalEventsCount;
+  String get googleTrendsStatus;
+  String get googlePlacesStatus;
+  Future<void> syncBackend();
+
   Future<CouponFeedbackModel> createFeedbackAndGenerateCoupon({
     required String ageGroup,
     required String interestCategory,
@@ -32,6 +42,30 @@ class IntelligenceRepositoryImpl implements IIntelligenceRepository {
   final IntelligenceApiService apiService;
 
   IntelligenceRepositoryImpl({required this.apiService});
+
+  @override
+  bool get isBackendOnline => apiService.isBackendOnline;
+
+  @override
+  int get backendObservationsCount => apiService.backendObservationsCount;
+
+  @override
+  int get backendTrendPointsCount => apiService.backendTrendPointsCount;
+
+  @override
+  int get backendPlaceLocationsCount => apiService.backendPlaceLocationsCount;
+
+  @override
+  int get backendRegionalEventsCount => apiService.backendRegionalEventsCount;
+
+  @override
+  String get googleTrendsStatus => apiService.googleTrendsStatus;
+
+  @override
+  String get googlePlacesStatus => apiService.googlePlacesStatus;
+
+  @override
+  Future<void> syncBackend() => apiService.syncWithBackend();
 
   @override
   List<String> getCategories() => const [
@@ -99,7 +133,7 @@ class IntelligenceRepositoryImpl implements IIntelligenceRepository {
         },
         opportunityTitle: 'Sabores que aproximam',
         opportunityDescription:
-        'Considere festivais e degustacoes para o publico de 25 a 34 anos.',
+        'Considere festivais e degustações para o público de 25 a 34 anos.',
       ),
       CategoryMetricModel(
         name: 'Musica',
@@ -114,7 +148,7 @@ class IntelligenceRepositoryImpl implements IIntelligenceRepository {
         },
         opportunityTitle: 'Palco ao entardecer',
         opportunityDescription:
-        'Shows acusticos e programacao musical atraem fortemente o publico de 18 a 24 anos.',
+        'Shows acústicos e programação musical atraem fortemente o público de 18 a 24 anos.',
       ),
       CategoryMetricModel(
         name: 'Entretenimento',
@@ -127,9 +161,9 @@ class IntelligenceRepositoryImpl implements IIntelligenceRepository {
           '35 a 44 anos': 42,
           '45 anos ou mais': 31,
         },
-        opportunityTitle: 'Lazer em familia e amigos',
+        opportunityTitle: 'Lazer em família e amigos',
         opportunityDescription:
-        'Atracoes interativas e sessoes especiais elevam o tempo de permanencia.',
+        'Atrações interativas e sessões especiais elevam o tempo de permanência.',
       ),
       CategoryMetricModel(
         name: 'Tecnologia',
@@ -142,9 +176,9 @@ class IntelligenceRepositoryImpl implements IIntelligenceRepository {
           '35 a 44 anos': 28,
           '45 anos ou mais': 18,
         },
-        opportunityTitle: 'Experiencias digitais em alta',
+        opportunityTitle: 'Experiências digitais em alta',
         opportunityDescription:
-        'Maior crescimento do mes (+8 p.p.). Considere arenas games e demonstracoes.',
+        'Maior crescimento do mês (+8 p.p.). Considere arenas games e demonstrações.',
       ),
       CategoryMetricModel(
         name: 'Moda',
@@ -157,9 +191,9 @@ class IntelligenceRepositoryImpl implements IIntelligenceRepository {
           '35 a 44 anos': 29,
           '45 anos ou mais': 24,
         },
-        opportunityTitle: 'Lancamentos de estacao',
+        opportunityTitle: 'Lançamentos de estação',
         opportunityDescription:
-        'Combine vitrines sazonais com beneficios cruzados nas lojas de vestuario.',
+        'Combine vitrines sazonais com benefícios cruzados nas lojas de vestuário.',
       ),
       CategoryMetricModel(
         name: 'Cultura',
@@ -174,7 +208,7 @@ class IntelligenceRepositoryImpl implements IIntelligenceRepository {
         },
         opportunityTitle: 'Identidade regional e leitura',
         opportunityDescription:
-        'Principal interesse do publico 45+. Explore exposicoes e feiras regionais.',
+        'Principal interesse do público 45+. Explore exposições e feiras regionais.',
       ),
       CategoryMetricModel(
         name: 'Esportes',
@@ -189,7 +223,7 @@ class IntelligenceRepositoryImpl implements IIntelligenceRepository {
         },
         opportunityTitle: 'Vida ativa e bem-estar',
         opportunityDescription:
-        'Retirada de kits de corridas e ativacoes esportivas geram fluxo qualificado.',
+        'Retirada de kits de corridas e ativações esportivas geram fluxo qualificado.',
       ),
     ];
   }
@@ -235,19 +269,19 @@ class IntelligenceRepositoryImpl implements IIntelligenceRepository {
   @override
   List<GooglePerceptionModel> getGoogleBusinessPerceptions() => const [
     GooglePerceptionModel(
-      theme: 'Conforto Termico e Estrutura',
+      theme: 'Conforto Térmico e Estrutura',
       sentiment: '92% Positivo',
       detail: 'Visitantes destacam o ambiente climatizado e seguro.',
     ),
     GooglePerceptionModel(
-      theme: 'Praca de Alimentacao e Eventos',
+      theme: 'Praça de Alimentação e Eventos',
       sentiment: '88% Positivo',
-      detail: 'Atracoes musicais e gastronomicas elevam a nota media (4.6).',
+      detail: 'Atrações musicais e gastronômicas elevam a nota média (4.6).',
     ),
     GooglePerceptionModel(
-      theme: 'Lazer Familiar e Conveniencia',
+      theme: 'Lazer Familiar e Conveniência',
       sentiment: '85% Positivo',
-      detail: 'Forte aprovacao em programacoes de fim de semana.',
+      detail: 'Forte aprovação em programações de fim de semana.',
     ),
   ];
 
