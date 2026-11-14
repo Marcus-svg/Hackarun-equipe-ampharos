@@ -19,10 +19,15 @@ class _TotemViewState extends State<TotemView> {
       listenable: widget.viewModel,
       builder: (context, _) {
         final vm = widget.viewModel;
+        // Em telas estreitas (celular) o cartão de 430px estourava; agora ele
+        // encolhe para caber na largura disponível e reduz o padding.
+        final screenWidth = MediaQuery.sizeOf(context).width;
+        final isCompact = screenWidth < 520;
+        final cardWidth = screenWidth < 470 ? screenWidth - 40 : 430.0;
         return Container(
-          width: 430,
+          width: cardWidth,
           constraints: const BoxConstraints(minHeight: 720),
-          padding: const EdgeInsets.all(32),
+          padding: EdgeInsets.all(isCompact ? 20 : 32),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
@@ -35,9 +40,12 @@ class _TotemViewState extends State<TotemView> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: const [
                       Text('CAPIM DOURADO SHOPPING',
                           style: AppTypography.labelGold),
                       Text('Dados Seguros e Anônimos',

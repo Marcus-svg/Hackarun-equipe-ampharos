@@ -48,10 +48,15 @@ class _StoreRedemptionViewState extends State<StoreRedemptionView> {
       listenable: widget.viewModel,
       builder: (context, _) {
         final vm = widget.viewModel;
+        // Largura fixa de 520px estourava em telas estreitas; agora o cartão
+        // encolhe para caber na largura disponível e reduz o padding.
+        final screenWidth = MediaQuery.sizeOf(context).width;
+        final isCompact = screenWidth < 560;
+        final cardWidth = screenWidth < 560 ? screenWidth - 40 : 520.0;
         return Center(
           child: Container(
-            width: 520,
-            padding: const EdgeInsets.all(32),
+            width: cardWidth,
+            padding: EdgeInsets.all(isCompact ? 20 : 32),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -74,6 +79,7 @@ class _StoreRedemptionViewState extends State<StoreRedemptionView> {
                 const SizedBox(height: 20),
                 DropdownButtonFormField<String>(
                   value: vm.selectedStore,
+                  isExpanded: true,
                   decoration: InputDecoration(
                     labelText: 'Estabelecimento Participante',
                     filled: true,

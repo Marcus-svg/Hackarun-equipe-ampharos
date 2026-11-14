@@ -48,47 +48,7 @@ class ShellView extends StatelessWidget {
         return Scaffold(
           body: Column(
             children: [
-              Container(
-                height: 60,
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF1E2229),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'CAPIM DOURADO EXPERIENCE INTELLIGENCE (MVVM)',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        _navButton(
-                          label: '1. Totem',
-                          active: coord.currentTab == 0,
-                          onTap: coord.navigateToTotem,
-                        ),
-                        const SizedBox(width: 12),
-                        _navButton(
-                          label: '2. Loja',
-                          active: coord.currentTab == 1,
-                          onTap: coord.navigateToStore,
-                        ),
-                        const SizedBox(width: 12),
-                        _navButton(
-                          label: '3. Dashboard',
-                          active: coord.currentTab == 2,
-                          onTap: coord.navigateToDashboard,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              _buildHeader(coord),
               Expanded(
                 child: Center(
                   child: SingleChildScrollView(
@@ -101,6 +61,71 @@ class ShellView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  // Cabeçalho responsivo: em telas largas o título e as abas ficam lado a lado;
+  // em telas estreitas (celular) o título sobe e as abas ganham uma linha
+  // própria, garantindo que continuem visíveis e clicáveis.
+  Widget _buildHeader(AppCoordinator coord) {
+    final title = const Text(
+      'CAPIM DOURADO EXPERIENCE INTELLIGENCE (MVVM)',
+      style: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 13,
+      ),
+    );
+
+    final navButtons = Wrap(
+      spacing: 12,
+      runSpacing: 8,
+      children: [
+        _navButton(
+          label: '1. Totem',
+          active: coord.currentTab == 0,
+          onTap: coord.navigateToTotem,
+        ),
+        _navButton(
+          label: '2. Loja',
+          active: coord.currentTab == 1,
+          onTap: coord.navigateToStore,
+        ),
+        _navButton(
+          label: '3. Dashboard',
+          active: coord.currentTab == 2,
+          onTap: coord.navigateToDashboard,
+        ),
+      ],
+    );
+
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFF1E2229),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isNarrow = constraints.maxWidth < 640;
+          if (isNarrow) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                title,
+                const SizedBox(height: 10),
+                navButtons,
+              ],
+            );
+          }
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(child: title),
+              const SizedBox(width: 16),
+              navButtons,
+            ],
+          );
+        },
+      ),
     );
   }
 

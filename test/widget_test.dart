@@ -40,7 +40,7 @@ void main() {
 
       totemViewModel.selectAgeGroup('18 a 24 anos');
       totemViewModel.selectCategoryAndAdvance('Tecnologia');
-      await totemViewModel.completeWheelAndIssueCoupon();
+      await totemViewModel.completeDirectlyAndIssueCoupon();
 
       final novoCupom = totemViewModel.generatedCoupon;
       expect(novoCupom, isNotNull);

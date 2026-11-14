@@ -1,5 +1,4 @@
 ﻿import 'package:flutter/material.dart';
-import '../../data/models/coupon_feedback_model.dart';
 import '../../design_system/components/cd_primary_button.dart';
 import '../../design_system/theme/app_colors.dart';
 import '../../design_system/theme/app_typography.dart';
@@ -37,8 +36,11 @@ class _DashboardViewState extends State<DashboardView> {
           return _buildTela01Acesso(vm);
         }
 
+        // Em telas estreitas o painel de 1020px estourava; agora encolhe.
+        final screenWidth = MediaQuery.sizeOf(context).width;
+        final panelWidth = screenWidth < 1060 ? screenWidth - 40 : 1020.0;
         return Container(
-          width: 1020,
+          width: panelWidth,
           decoration: BoxDecoration(
             color: const Color(0xFFFCFBF9),
             borderRadius: BorderRadius.circular(14),
@@ -88,8 +90,11 @@ class _DashboardViewState extends State<DashboardView> {
   // TELA 01 / ACESSO (LOGIN DESKTOP & MOBILE DO FIGMA)
   // ==========================================================================
   Widget _buildTela01Acesso(DashboardViewModel vm) {
+    // Largura fixa de 920px estourava em telas estreitas; agora encolhe.
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final loginWidth = screenWidth < 960 ? screenWidth - 40 : 920.0;
     return Container(
-      width: 920,
+      width: loginWidth,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
@@ -520,7 +525,7 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             // Card Esquerdo: Interesses por categoria
             Container(
-              width: 440,
+              width: _fitWidth(440),
               padding: const EdgeInsets.all(24),
               decoration: _cardDecoration(),
               child: Column(
@@ -566,15 +571,16 @@ class _DashboardViewState extends State<DashboardView> {
                     );
                   }),
                   const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 8,
+                    runSpacing: 4,
                     children: [
-                      const Expanded(
-                        child: Text(
-                          'Cada pessoa pode escolher mais de uma categoria.',
-                          style: TextStyle(
-                              fontSize: 11, color: AppColors.textSecondary),
-                        ),
+                      const Text(
+                        'Cada pessoa pode escolher mais de uma categoria.',
+                        style: TextStyle(
+                            fontSize: 11, color: AppColors.textSecondary),
                       ),
                       TextButton(
                         onPressed: () => vm.setTab(AdminTab.interesses),
@@ -592,7 +598,7 @@ class _DashboardViewState extends State<DashboardView> {
 
             // Coluna Direita: Participações por Semana + Em Destaque
             SizedBox(
-              width: 390,
+              width: _fitWidth(390),
               child: Column(
                 children: [
                   Container(
@@ -721,7 +727,7 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             // Distribuição por idade
             Container(
-              width: 460,
+              width: _fitWidth(460),
               padding: const EdgeInsets.all(24),
               decoration: _cardDecoration(),
               child: Column(
@@ -774,7 +780,7 @@ class _DashboardViewState extends State<DashboardView> {
 
             // Card Público em Foco
             Container(
-              width: 370,
+              width: _fitWidth(370),
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 color: AppColors.cream,
@@ -931,7 +937,7 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             // Card Categoria Selecionada
             Container(
-              width: 400,
+              width: _fitWidth(400),
               padding: const EdgeInsets.all(24),
               decoration: _cardDecoration(),
               child: Column(
@@ -960,7 +966,7 @@ class _DashboardViewState extends State<DashboardView> {
 
             // Card Interesse por faixa etária
             Container(
-              width: 430,
+              width: _fitWidth(430),
               padding: const EdgeInsets.all(24),
               decoration: _cardDecoration(),
               child: Column(
@@ -1085,7 +1091,7 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             // Gráfico Tecnologia em alta (Jun a Set)
             Container(
-              width: 460,
+              width: _fitWidth(460),
               padding: const EdgeInsets.all(24),
               decoration: _cardDecoration(),
               child: Column(
@@ -1139,7 +1145,7 @@ class _DashboardViewState extends State<DashboardView> {
 
             // Card Maior Crescimento
             Container(
-              width: 370,
+              width: _fitWidth(370),
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 color: AppColors.cream,
@@ -1259,7 +1265,7 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             // Card Configurar Relatório
             Container(
-              width: 440,
+              width: _fitWidth(440),
               padding: const EdgeInsets.all(24),
               decoration: _cardDecoration(),
               child: Column(
@@ -1342,7 +1348,7 @@ class _DashboardViewState extends State<DashboardView> {
 
             // Coluna Direita: Prévia do Relatório + Últimos Relatórios
             SizedBox(
-              width: 390,
+              width: _fitWidth(390),
               child: Column(
                 children: [
                   Container(
@@ -1503,6 +1509,19 @@ class _DashboardViewState extends State<DashboardView> {
         ],
       ),
     );
+  }
+
+  // Em telas estreitas, cartões com largura fixa passam a ocupar a largura
+  // disponível, evitando overflow horizontal no celular.
+  double _fitWidth(double preferred) {
+    final screen = MediaQuery.sizeOf(context).width;
+    final panelWidth = screen < 1060 ? screen - 40 : 1020.0;
+    final isDesktop = panelWidth >= 780;
+    // No desktop o painel tem sidebar (220) + padding (32 de cada lado);
+    // no mobile há apenas o padding do conteúdo (20 de cada lado).
+    final available = isDesktop ? (panelWidth - 284) : (panelWidth - 40);
+    if (available <= 0) return preferred;
+    return preferred < available ? preferred : available;
   }
 
   BoxDecoration _cardDecoration() {
