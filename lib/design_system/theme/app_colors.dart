@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 abstract class AppColors {
   static const Color gold = Color(0xFFC59B43);

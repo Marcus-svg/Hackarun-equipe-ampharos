@@ -1,29 +1,27 @@
-import 'package:flutter/material.dart';
-
-enum AppScene { totem, storeRedemption, dashboard }
+﻿import 'package:flutter/material.dart';
 
 class AppCoordinator extends ChangeNotifier {
-  AppScene _currentScene = AppScene.totem;
-  String? _lastGeneratedCouponCode;
-
-  AppScene get currentScene => _currentScene;
-  String? get lastGeneratedCouponCode => _lastGeneratedCouponCode;
+  int currentTab = 0; // 0 = Totem, 1 = Loja, 2 = Dashboard
+  String? prefilledStoreCode;
 
   void navigateToTotem() {
-    _currentScene = AppScene.totem;
+    currentTab = 0;
     notifyListeners();
   }
 
-  void navigateToStoreRedemption({String? prefilledCouponCode}) {
-    if (prefilledCouponCode != null) {
-      _lastGeneratedCouponCode = prefilledCouponCode;
-    }
-    _currentScene = AppScene.storeRedemption;
+  void navigateToStore() {
+    currentTab = 1;
+    notifyListeners();
+  }
+
+  void navigateToStoreWithCode(String code) {
+    prefilledStoreCode = code;
+    currentTab = 1; // Vai para a aba da Loja
     notifyListeners();
   }
 
   void navigateToDashboard() {
-    _currentScene = AppScene.dashboard;
+    currentTab = 2;
     notifyListeners();
   }
 }

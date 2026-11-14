@@ -1,5 +1,4 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../design_system/components/cd_primary_button.dart';
 import '../../design_system/theme/app_colors.dart';
 import '../../design_system/theme/app_typography.dart';
@@ -13,41 +12,7 @@ class TotemView extends StatefulWidget {
   State<TotemView> createState() => _TotemViewState();
 }
 
-class _TotemViewState extends State<TotemView>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _wheelController;
-  late Animation<double> _wheelAnimation;
-  bool _spinning = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _wheelController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2400),
-    );
-    _wheelAnimation = CurvedAnimation(
-      parent: _wheelController,
-      curve: Curves.decelerate,
-    );
-  }
-
-  @override
-  void dispose() {
-    _wheelController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _spinWheel() async {
-    if (_spinning) return;
-    setState(() => _spinning = true);
-    await _wheelController.forward(from: 0);
-    await widget.viewModel.completeWheelAndIssueCoupon();
-    if (mounted) {
-      setState(() => _spinning = false);
-    }
-  }
-
+class _TotemViewState extends State<TotemView> {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -75,7 +40,7 @@ class _TotemViewState extends State<TotemView>
                     children: [
                       Text('CAPIM DOURADO SHOPPING',
                           style: AppTypography.labelGold),
-                      Text('LGPD Pseudonimizado',
+                      Text('Dados Seguros e Anônimos',
                           style: TextStyle(
                               fontSize: 10, color: AppColors.textSecondary)),
                     ],
@@ -85,8 +50,7 @@ class _TotemViewState extends State<TotemView>
                   if (vm.step == 1) _buildStep1Interests(vm),
                   if (vm.step == 2) _buildStep2Events(vm),
                   if (vm.step == 3) _buildStep3Satisfaction(vm),
-                  if (vm.step == 4) _buildStep4Wheel(),
-                  if (vm.step == 5) _buildStep5Coupon(vm),
+                  if (vm.step == 4) _buildStep4Coupon(vm),
                 ],
               ),
               const SizedBox(height: 24),
@@ -108,53 +72,49 @@ class _TotemViewState extends State<TotemView>
         ),
         const SizedBox(height: 12),
         const Text(
-          'Responda voluntariamente a 3 perguntas rápidas e receba um cupom exclusivo para usar nas lojas participantes.',
+          'Responda a 3 perguntas rápidas e garanta o seu benefício exclusivo.',
           style: AppTypography.body,
         ),
         const SizedBox(height: 28),
-        Row(
-          children: [
-            Container(
-              width: 96,
-              height: 96,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.gold, width: 5),
-              ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('30', style: TextStyle(fontSize: 30)),
-                  Text('SEGUNDOS',
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppColors.cream,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.gold, width: 1.2),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.local_offer_outlined,
+                  color: AppColors.gold, size: 36),
+              const SizedBox(width: 16),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Até 10% de desconto',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15)),
+                    SizedBox(height: 4),
+                    Text(
+                      'Após responder, você ganha um cupom único para usar em lojas selecionadas do shopping.',
                       style: TextStyle(
-                          fontSize: 8, color: AppColors.textSecondary)),
-                ],
+                          fontSize: 12, color: AppColors.textSecondary),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 20),
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Rápido e Sem CPF.',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                  SizedBox(height: 6),
-                  Text('3 perguntas de interesse\n+ 1 Cupom de código único',
-                      style: AppTypography.body),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 24),
         InkWell(
           onTap: () => vm.toggleLgpd(!vm.lgpdAccepted),
           borderRadius: BorderRadius.circular(12),
           child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.cream,
+              color: AppColors.lightCream,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: vm.lgpdAccepted ? AppColors.gold : Colors.transparent,
@@ -173,9 +133,19 @@ class _TotemViewState extends State<TotemView>
                 ),
                 const SizedBox(width: 10),
                 const Expanded(
-                  child: Text(
-                    'Consentimento Explícito (LGPD): Aceito informar minha faixa etária e interesses de forma anônima para geração do cupom e análise agregada do shopping.',
-                    style: TextStyle(fontSize: 11, height: 1.35),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Privacidade Garantida (Sem CPF ou Nome)',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Toque para aceitar: suas respostas são totalmente anônimas e usadas apenas para gerar seu cupom e melhorar o shopping.',
+                        style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.textSecondary),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -223,7 +193,7 @@ class _TotemViewState extends State<TotemView>
               child: Container(
                 width: 175,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                 decoration: BoxDecoration(
                   color: AppColors.cream,
                   borderRadius: BorderRadius.circular(12),
@@ -263,37 +233,37 @@ class _TotemViewState extends State<TotemView>
             style: AppTypography.h2),
         const SizedBox(height: 16),
         ...events.map((ev) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: InkWell(
-                onTap: () => vm.selectEventFormatAndAdvance(ev),
+          padding: const EdgeInsets.only(bottom: 10),
+          child: InkWell(
+            onTap: () => vm.selectEventFormatAndAdvance(ev),
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.cream,
                 borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.cream,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(ev,
-                            style: const TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w500)),
-                      ),
-                      const Text('→'),
-                    ],
-                  ),
-                ),
               ),
-            )),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(ev,
+                        style: const TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w500)),
+                  ),
+                  const Text('→'),
+                ],
+              ),
+            ),
+          ),
+        )),
       ],
     );
   }
 
   Widget _buildStep3Satisfaction(TotemViewModel vm) {
-    const options = ['Más', 'Boas', 'Excelentes'];
+    const options = ['Ruim', 'Boas', 'Excelentes'];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -303,101 +273,46 @@ class _TotemViewState extends State<TotemView>
             style: AppTypography.h2),
         const SizedBox(height: 16),
         ...options.asMap().entries.map((entry) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: InkWell(
-                onTap: () => vm.selectSatisfactionAndAdvance(entry.value),
+          padding: const EdgeInsets.only(bottom: 12),
+          child: InkWell(
+            onTap: () async {
+              vm.selectSatisfaction(entry.value);
+              await vm.completeDirectlyAndIssueCoupon();
+            },
+            borderRadius: BorderRadius.circular(14),
+            child: Container(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              decoration: BoxDecoration(
+                color: AppColors.cream,
                 borderRadius: BorderRadius.circular(14),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-                  decoration: BoxDecoration(
-                    color: AppColors.cream,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('0${entry.key + 1}   ${entry.value}',
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w600)),
-                      const Text('→'),
-                    ],
-                  ),
-                ),
               ),
-            )),
-      ],
-    );
-  }
-
-  Widget _buildStep4Wheel() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Gire a roleta para emitir seu Cupom Único!',
-            style: AppTypography.h2),
-        const SizedBox(height: 24),
-        Center(
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              AnimatedBuilder(
-                animation: _wheelAnimation,
-                builder: (context, child) {
-                  return Transform.rotate(
-                    angle: _wheelAnimation.value * 10 * pi,
-                    child: child,
-                  );
-                },
-                child: Container(
-                  width: 220,
-                  height: 220,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.cream,
-                    border: Border.all(color: AppColors.gold, width: 6),
-                  ),
-                  child: const Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Positioned(
-                          top: 18,
-                          child: Text('10% OFF',
-                              style: TextStyle(fontWeight: FontWeight.bold))),
-                      Positioned(
-                          bottom: 18,
-                          child: Text('10% OFF',
-                              style: TextStyle(fontWeight: FontWeight.bold))),
-                      Positioned(
-                          left: 16,
-                          child: Text('Mimo',
-                              style: TextStyle(fontWeight: FontWeight.bold))),
-                      Positioned(
-                          right: 16,
-                          child: Text('5% OFF',
-                              style: TextStyle(fontWeight: FontWeight.bold))),
-                    ],
-                  ),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('0${entry.key + 1}   ${entry.value}',
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w600)),
+                  const Text('→'),
+                ],
               ),
-              const Icon(Icons.arrow_drop_down, size: 36),
-            ],
+            ),
           ),
-        ),
+        )),
       ],
     );
   }
 
-  Widget _buildStep5Coupon(TotemViewModel vm) {
+  Widget _buildStep4Coupon(TotemViewModel vm) {
     final coupon = vm.generatedCoupon;
     if (coupon == null) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('CUPOM EMITIDO COM SUCESSO', style: AppTypography.labelGold),
+        const Text('CUPOM GERADO COM SUCESSO', style: AppTypography.labelGold),
         const SizedBox(height: 8),
-        const Text('Utilize este código em uma loja participante:',
+        const Text('Aproveite até 10% de desconto nas lojas participantes:',
             style: AppTypography.h2),
         const SizedBox(height: 20),
         Container(
@@ -412,7 +327,7 @@ class _TotemViewState extends State<TotemView>
             children: [
               const Text('CÓDIGO PSEUDONIMIZADO',
                   style:
-                      TextStyle(fontSize: 10, color: AppColors.textSecondary)),
+                  TextStyle(fontSize: 10, color: AppColors.textSecondary)),
               const SizedBox(height: 8),
               Text(
                 coupon.code,
@@ -441,7 +356,7 @@ class _TotemViewState extends State<TotemView>
       return CdPrimaryButton(
         label: vm.lgpdAccepted
             ? 'Aceitar e Começar →'
-            : 'Aceite o termo LGPD para iniciar',
+            : 'Aceite os termos para iniciar',
         onPressed: vm.lgpdAccepted ? vm.startSurvey : null,
       );
     }
@@ -452,17 +367,10 @@ class _TotemViewState extends State<TotemView>
       );
     }
     if (vm.step == 4) {
-      return CdPrimaryButton(
-        label: 'Girar a Roleta e Gerar Cupom',
-        isLoading: _spinning,
-        onPressed: _spinWheel,
-      );
-    }
-    if (vm.step == 5) {
       return Column(
         children: [
           CdPrimaryButton(
-            label: 'Validar este Cupom na Loja (Passo 3 e 4) →',
+            label: 'Validar este Cupom na Loja →',
             icon: Icons.storefront,
             onPressed: vm.goToStoreSimulation,
           ),

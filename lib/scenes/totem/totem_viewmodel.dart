@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../data/models/coupon_feedback_model.dart';
 import '../../data/repositories/intelligence_repository.dart';
 import '../shell/app_coordinator.dart';
@@ -9,16 +9,22 @@ class TotemViewModel extends ChangeNotifier {
 
   int step = 0;
   bool lgpdAccepted = false;
+
+  // Respostas coletadas do usuário
   String selectedAgeGroup = '25 a 34 anos';
   String selectedCategory = 'Gastronomia';
   String selectedEventFormat = 'Festival Gastronômico & Música na Praça';
   String selectedSatisfaction = 'Excelentes';
+
   CouponFeedbackModel? generatedCoupon;
 
-  TotemViewModel({required this.repository, required this.coordinator});
+  TotemViewModel({
+    required this.repository,
+    required this.coordinator,
+  });
 
-  List<String> get categories => repository.getCategories();
   List<String> get ageGroups => repository.getAgeGroups();
+  List<String> get categories => repository.getCategories();
 
   void toggleLgpd(bool value) {
     lgpdAccepted = value;
@@ -48,9 +54,20 @@ class TotemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void selectSatisfactionAndAdvance(String satisfaction) {
+  void selectSatisfaction(String satisfaction) {
     selectedSatisfaction = satisfaction;
-    step = 4;
+    notifyListeners();
+  }
+
+  Future<void> completeDirectlyAndIssueCoupon() async {
+    generatedCoupon = await repository.createFeedbackAndGenerateCoupon(
+      ageGroup: selectedAgeGroup,
+      interestCategory: selectedCategory,
+      preferredEventFormat: selectedEventFormat,
+      generalSatisfaction: selectedSatisfaction,
+      discountBenefit: '10% OFF',
+    );
+    step = 4; // Avança para a tela final do cupom gerado
     notifyListeners();
   }
 
@@ -61,18 +78,6 @@ class TotemViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> completeWheelAndIssueCoupon() async {
-    generatedCoupon = await repository.createFeedbackAndGenerateCoupon(
-      ageGroup: selectedAgeGroup,
-      interestCategory: selectedCategory,
-      preferredEventFormat: selectedEventFormat,
-      generalSatisfaction: selectedSatisfaction,
-      discountBenefit: '10% OFF',
-    );
-    step = 5;
-    notifyListeners();
-  }
-
   void resetFlow() {
     step = 0;
     lgpdAccepted = false;
@@ -81,8 +86,8 @@ class TotemViewModel extends ChangeNotifier {
   }
 
   void goToStoreSimulation() {
-    coordinator.navigateToStoreRedemption(
-      prefilledCouponCode: generatedCoupon?.code,
-    );
+    if (generatedCoupon != null) {
+      coordinator.navigateToStoreWithCode(generatedCoupon!.code);
+    }
   }
 }

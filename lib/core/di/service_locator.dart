@@ -1,4 +1,4 @@
-import '../../data/repositories/intelligence_repository.dart';
+﻿import '../../data/repositories/intelligence_repository.dart';
 import '../../data/services/intelligence_api_service.dart';
 import '../../scenes/shell/app_coordinator.dart';
 

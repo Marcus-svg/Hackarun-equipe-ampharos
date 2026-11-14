@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../data/models/coupon_feedback_model.dart';
 import '../../data/repositories/intelligence_repository.dart';
 import '../shell/app_coordinator.dart';
@@ -34,7 +34,7 @@ class StoreRedemptionViewModel extends ChangeNotifier {
       );
       isSuccess = true;
       statusMessage =
-          'Resgate registrado com sucesso! O cupom ${redeemed.code} (${redeemed.interestCategory}) foi vinculado à loja "$selectedStore".';
+          'Resgate registrado com sucesso! O cupom ${redeemed.code} (${redeemed.interestCategory}) foi vinculado Ã  loja "$selectedStore".';
     } catch (e) {
       isSuccess = false;
       statusMessage = e.toString().replaceAll('Exception: ', '');

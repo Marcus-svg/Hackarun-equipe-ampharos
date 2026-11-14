@@ -1,4 +1,4 @@
-class CouponFeedbackModel {
+﻿class CouponFeedbackModel {
   final String code;
   final String ageGroup;
   final String interestCategory;
@@ -20,30 +20,48 @@ class CouponFeedbackModel {
     this.isRedeemed = false,
     this.redeemedStoreName,
   });
+}
 
-  factory CouponFeedbackModel.fromJson(Map<String, dynamic> json) {
-    return CouponFeedbackModel(
-      code: json['code'] as String,
-      ageGroup: json['ageGroup'] as String,
-      interestCategory: json['interestCategory'] as String,
-      preferredEventFormat: json['preferredEventFormat'] as String,
-      generalSatisfaction: json['generalSatisfaction'] as String,
-      discountBenefit: json['discountBenefit'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      isRedeemed: json['isRedeemed'] as bool? ?? false,
-      redeemedStoreName: json['redeemedStoreName'] as String?,
-    );
-  }
+class CategoryMetricModel {
+  final String name;
+  final int baseInterestedCount;
+  final int augustPercentage;
+  final List<int> monthlyTrendJunToSep; // [Jun, Jul, Ago, Set]
+  final Map<String, int> ageGroupAffinity; // % dentro de cada faixa etária
+  final String opportunityTitle;
+  final String opportunityDescription;
 
-  Map<String, dynamic> toJson() => {
-        'code': code,
-        'ageGroup': ageGroup,
-        'interestCategory': interestCategory,
-        'preferredEventFormat': preferredEventFormat,
-        'generalSatisfaction': generalSatisfaction,
-        'discountBenefit': discountBenefit,
-        'createdAt': createdAt.toIso8601String(),
-        'isRedeemed': isRedeemed,
-        'redeemedStoreName': redeemedStoreName,
-      };
+  const CategoryMetricModel({
+    required this.name,
+    required this.baseInterestedCount,
+    required this.augustPercentage,
+    required this.monthlyTrendJunToSep,
+    required this.ageGroupAffinity,
+    required this.opportunityTitle,
+    required this.opportunityDescription,
+  });
+}
+
+class AudienceProfileModel {
+  final String ageGroup;
+  final int baseConsumers;
+  final String topInterest;
+
+  const AudienceProfileModel({
+    required this.ageGroup,
+    required this.baseConsumers,
+    required this.topInterest,
+  });
+}
+
+class GooglePerceptionModel {
+  final String theme;
+  final String sentiment;
+  final String detail;
+
+  const GooglePerceptionModel({
+    required this.theme,
+    required this.sentiment,
+    required this.detail,
+  });
 }
