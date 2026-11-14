@@ -1,21 +1,48 @@
-# Ecossistema Inteligente Capim Dourado (Totem & Analytics)
+# Hackarun - Capim Dourado Experience Intelligence
 
 ![Status](https://img.shields.io/badge/Status-Em_Desenvolvimento_(MVP)-yellow)
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC)
-![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E)
-![Figma](https://img.shields.io/badge/Figma-Prototipo-F24E1E)
+![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B)
+![Python](https://img.shields.io/badge/Python-3.12-3776AB)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688)
+![SQLite](https://img.shields.io/badge/SQLite-local-003B57)
 
-Solucao B2B2C de autoatendimento interativo (Modo Kiosk) e inteligencia de dados em tempo real, desenvolvida durante o Hackathon para o **Capim Dourado Shopping (Palmas - TO)**. O sistema transforma a coleta de feedback em uma experiencia gamificada de 30 segundos, gerando metricas acionaveis para a gestao e conversao de vendas para os lojistas.
+Este repositório contém a implementação real do Hackarun: um frontend em Flutter para o totem e dashboard e um backend em Python/FastAPI para coleta e inteligência regional. A documentação antiga do README descrevia uma stack em Next.js/Supabase e precisa ser alinhada ao código atual.
+
+O objetivo da solução é transformar dados regionais em indicadores e recomendações com evidência, auxiliando o Capim Dourado Shopping a identificar oportunidades de eventos, experiências e categorias com maior relevância em Palmas e região.
 
 ---
 
-## Sumario Executivo e Problema de Negocio
+## Como executar localmente
 
-Centros comerciais enfrentam baixa adesao em pesquisas de satisfacao tradicionais e dificuldade em atribuir o impacto da experiencia do visitante ao desempenho das lojas. 
+### Backend Python
 
-Nossa solucao substitui formularios longos por um **Micro-Funil Gamificado de 30 segundos** operado em totens touch. O visitante avalia a experiencia em tres toques, gira uma roleta de recompensas instantaneas e resgata descontos no comercio local, enquanto a administracao recebe telemetria em tempo real sobre percepcao de variedade, atendimento e retencao.
+```powershell
+cd backend
+copy .env.example .env
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+Os endpoints principais ficam em:
+- `http://localhost:8000/health`
+- `http://localhost:8000/api/dashboard/summary`
+- `http://localhost:8000/api/integrations/status`
+- `http://localhost:8000/api/trends/import`
+
+### Frontend Flutter
+
+O app Flutter depende do SDK do Flutter instalado localmente. Em um ambiente com Flutter configurado:
+
+```powershell
+flutter pub get
+flutter analyze
+flutter test
+flutter run -d chrome
+```
+
+Se o Flutter estiver em emulador Android, o backend deve ser acessado por IP do host (ex.: `http://10.0.2.2:8000` em emuladores Android) em vez de `localhost`.
 
 ---
 
