@@ -4,8 +4,11 @@ import 'package:http/http.dart' as http;
 import '../models/coupon_feedback_model.dart';
 
 class IntelligenceApiService {
-  // Substitua o localhost pela URL pública do seu Render
-  static const String baseUrl = 'https://hackarun-backend-xxxx.onrender.com/api';
+  // URL do backend FastAPI (pode ser sobrescrita no build com --dart-define=API_BASE_URL=...)
+  static const String baseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://localhost:8000/api',
+  );
 
   final int baseHistoricalConsumers = 1242;
   final List<int> baseWeeklyParticipations = [260, 294, 318, 370];
